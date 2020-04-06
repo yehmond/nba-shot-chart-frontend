@@ -1,6 +1,7 @@
 import { ResponsiveScatterPlot } from "@nivo/scatterplot";
 import React from "react";
-const imgUrl = require("../images/halfcourt.png");
+import "./ShotChart.css";
+const imgUrl = require("../../images/halfcourt.png");
 
 const data = [];
 
@@ -10,17 +11,12 @@ export default function ShotChart() {
   const width = 1249 / factor;
   return (
     <div
-      className={"container"}
+      id={"shot-chart-container"}
       style={{
         height: `${height}px`,
         width: `${width}px`,
         backgroundImage: `url(${imgUrl})`,
         backgroundSize: `${width}px ${height}px`,
-        backgroundRepeat: "no-repeat",
-        margin: "50px auto",
-        backgroundColor: "#2b2d2f",
-        // borderRadius: "30px",
-        boxShadow: "0 0 90px -20px rgba(0,0,0, 0.25)",
       }}
     >
       <ResponsiveScatterPlot

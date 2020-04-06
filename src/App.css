@@ -1,0 +1,19 @@
+  
+* {
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+  font-size: light;
+}
+
+#selection-bar {
+  margin: 30px auto;
+  text-align: center;
+  width: 80%;
+  /* display: inline-block; */
+}
+
+.form-group {
+  display: inline-block;
+  width: 10rem;
+  margin: auto 5px;
+}
