@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import gql from "graphql-tag";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
@@ -18,23 +18,59 @@ const FETCH_TEAMS_QUERY = gql`
 `;
 
 const FETCH_PLAYERS_QUERY = gql`
-  {
-    getPlayers {
-      name
-    }
+  query getPlayers($year: String!, $seasonType: String!, $team: String!) {
+    getPlayers(year: $year, seasonType: $seasonType, team: $team)
   }
 `;
 
 export default function SelectionBar() {
+  const [year, setYear] = useState("2018-19");
+  const [seasonType, setSeasonType] = useState("Playoffs");
+  const [team, setTeam] = useState("Toronto Raptors");
+  const [players, setPlayers] = useState([
+    "Kyle Lowry",
+    "Marc Gasol",
+    "Serge Ibaka",
+    "Jodie Meeks",
+    "Danny Green",
+    "Jeremy Lin",
+    "Kawhi Leonard",
+    "Eric Moreland",
+    "Norman Powell",
+    "Malcolm Miller",
+    "Patrick McCaw",
+    "Pascal Siakam",
+    "Fred VanVleet",
+    "Chris Boucher",
+  ]);
+  const [player, setPlayer] = useState("");
+
   const { data: years } = useQuery(FETCH_YEARS_QUERY);
   const { data: teams } = useQuery(FETCH_TEAMS_QUERY);
-  const [getPlayers, { data: players }] = useLazyQuery(FETCH_PLAYERS_QUERY);
+  const [getPlayers, { data: fetchedPlayers }] = useLazyQuery(
+    FETCH_PLAYERS_QUERY,
+    {
+      variables: { year, seasonType, team },
+    }
+  );
+
   return (
     <div>
-      <Form id={"selection-bar"}>
+      <Form
+        id={"selection-bar"}
+        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+        }}
+      >
         <Form.Group controlId="exampleForm.SelectCustom">
           <Form.Label>Year</Form.Label>
-          <Form.Control as="select" defaultValue={"2011-12"}>
+          <Form.Control
+            as="select"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+              setYear(event.currentTarget.value);
+            }}
+            value={year}
+          >
             {years &&
               years.getYears.map((elem: string) => {
                 return <option key={elem}>{elem}</option>;
@@ -43,7 +79,13 @@ export default function SelectionBar() {
         </Form.Group>
         <Form.Group controlId="exampleForm.SelectCustom">
           <Form.Label>Season Type</Form.Label>
-          <Form.Control as="select" defaultValue={"Regular Season"}>
+          <Form.Control
+            as="select"
+            onChange={(event: React.FormEvent<HTMLInputElement>) =>
+              setSeasonType(event.currentTarget.value)
+            }
+            value={seasonType}
+          >
             <option>Pre Season</option>
             <option>Regular Season</option>
             <option>Playoffs</option>
@@ -51,7 +93,14 @@ export default function SelectionBar() {
         </Form.Group>
         <Form.Group controlId="exampleForm.SelectCustom">
           <Form.Label>Team</Form.Label>
-          <Form.Control as="select" onChange={() => getPlayers()}>
+          <Form.Control
+            as="select"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+              setTeam(event.currentTarget.value);
+              getPlayers();
+            }}
+            value={team}
+          >
             {teams &&
               teams.getTeams.map(({ name }: { name: string }) => {
                 return <option key={name}>{name}</option>;
@@ -60,10 +109,20 @@ export default function SelectionBar() {
         </Form.Group>
         <Form.Group controlId="exampleForm.SelectCustom">
           <Form.Label>Player</Form.Label>
-          <Form.Control as="select">
+          <Form.Control
+            as="select"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+              setPlayer(event.currentTarget.value);
+            }}
+            value={player}
+          >
             <option>All Team Players</option>
-            {players &&
-              players.getPlayers.map(({ name }: { name: string }) => {
+            {!fetchedPlayers &&
+              players.map((name: string) => {
+                return <option key={name}>{name}</option>;
+              })}
+            {fetchedPlayers &&
+              fetchedPlayers.getPlayers.map((name: string) => {
                 return <option key={name}>{name}</option>;
               })}
           </Form.Control>
@@ -78,7 +137,7 @@ export default function SelectionBar() {
             <option>4</option>
           </Form.Control>
         </Form.Group>
-        <Button>Submit</Button>
+        <Button type="submit">Submit</Button>
       </Form>
     </div>
   );
