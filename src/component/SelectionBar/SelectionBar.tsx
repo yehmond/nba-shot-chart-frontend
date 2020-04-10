@@ -23,11 +23,32 @@ const FETCH_PLAYERS_QUERY = gql`
   }
 `;
 
+const FETCH_SHOTCHART_QUERY = gql`
+  query getShotCharts(
+    $year: String!
+    $seasonType: String!
+    $team: String!
+    $player: String!
+    $period: String!
+  ) {
+    getShotCharts(
+      year: $year
+      seasonType: $seasonType
+      team: $team
+      player: $player
+      period: $period
+    ) {
+      LOC_X
+      LOC_Y
+    }
+  }
+`;
+
 export default function SelectionBar() {
   const [year, setYear] = useState("2018-19");
   const [seasonType, setSeasonType] = useState("Playoffs");
   const [team, setTeam] = useState("Toronto Raptors");
-  const [players, setPlayers] = useState([
+  const [players] = useState([
     "Kyle Lowry",
     "Marc Gasol",
     "Serge Ibaka",
@@ -43,7 +64,8 @@ export default function SelectionBar() {
     "Fred VanVleet",
     "Chris Boucher",
   ]);
-  const [player, setPlayer] = useState("");
+  const [player, setPlayer] = useState("All Team Players");
+  const [period, setPeriod] = useState("All Periods");
 
   const { data: years } = useQuery(FETCH_YEARS_QUERY);
   const { data: teams } = useQuery(FETCH_TEAMS_QUERY);
@@ -53,15 +75,20 @@ export default function SelectionBar() {
       variables: { year, seasonType, team },
     }
   );
+  const [getShotChart, { data: shotChart }] = useLazyQuery(
+    FETCH_SHOTCHART_QUERY
+  );
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    getShotChart({
+      variables: { year, seasonType, team, player, period },
+    });
+  };
 
   return (
     <div>
-      <Form
-        id={"selection-bar"}
-        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-          event.preventDefault();
-        }}
-      >
+      <Form id={"selection-bar"} onSubmit={handleSubmit}>
         <Form.Group controlId="exampleForm.SelectCustom">
           <Form.Label>Year</Form.Label>
           <Form.Control
@@ -86,7 +113,8 @@ export default function SelectionBar() {
             }
             value={seasonType}
           >
-            <option>Pre Season</option>
+            <option>All Season Types</option>
+            <option value= {"Pre Season"}>Pre-season</option>
             <option>Regular Season</option>
             <option>Playoffs</option>
           </Form.Control>
@@ -129,12 +157,22 @@ export default function SelectionBar() {
         </Form.Group>
         <Form.Group controlId="exampleForm.SelectCustom">
           <Form.Label>Period</Form.Label>
-          <Form.Control as="select" defaultValue={"All"}>
-            <option>All</option>
+          <Form.Control
+            as="select"
+            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+              setPeriod(event.currentTarget.value);
+            }}
+            vale={period}
+          >
+            <option>All Periods</option>
             <option>1</option>
             <option>2</option>
             <option>3</option>
             <option>4</option>
+            <option value={"5"}>OT1</option>
+            <option value={"6"}>OT2</option>
+            <option value={"7"}>OT3</option>
+            <option value={"8"}>OT4</option>
           </Form.Control>
         </Form.Group>
         <Button type="submit">Submit</Button>
