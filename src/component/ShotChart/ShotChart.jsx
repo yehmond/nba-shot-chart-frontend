@@ -7,10 +7,12 @@ const imgUrl = require("../../images/halfcourt.png");
 export default function ShotChart() {
   let [data] = useContext(ShotChartContext);
   console.log(data);
-  data = [];
+  // const factor = 1.5;
+  // const height = 1182 / factor;
+  // const width = 1249 / factor;
   const factor = 1.5;
-  const height = 1182 / factor;
-  const width = 1249 / factor;
+  const height = 470 * factor;
+  const width = 500 * factor;
   return (
     <div
       id={"shot-chart-container"}
@@ -23,63 +25,48 @@ export default function ShotChart() {
     >
       <ResponsiveScatterPlot
         data={data ? data : []}
-        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-        xScale={{ type: "linear", min: 0, max: "auto" }}
+        // margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+        xScale={{ type: "linear", min: -250, max: 250 }}
         xFormat={function (e) {
-          return e + " kg";
+          console.log(e);
+          return e;
         }}
-        yScale={{ type: "linear", min: 0, max: "auto" }}
+        yScale={{ type: "linear", min: -50, max: 420 }}
         yFormat={function (e) {
-          return e + " cm";
+          return e;
         }}
-        colors={{ scheme: "dark2" }}
+        nodeSize={15}
+        colors={{ scheme: "nivo" }}
+        borderColor="#ffffff"
+        blendMode="normal"
         enableGridX={false}
         enableGridY={false}
         axisTop={null}
         axisRight={null}
-        axisBottom={{
-          orient: "bottom",
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: "weight",
-          legendPosition: "middle",
-          legendOffset: 46,
-        }}
-        axisLeft={{
-          orient: "left",
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: "size",
-          legendPosition: "middle",
-          legendOffset: -60,
-        }}
-        animate={false}
-        motionStiffness={200}
-        legends={[
-          {
-            anchor: "bottom-right",
-            direction: "column",
-            justify: false,
-            translateX: 130,
-            translateY: 0,
-            itemWidth: 100,
-            itemHeight: 12,
-            itemsSpacing: 5,
-            itemDirection: "left-to-right",
-            symbolSize: 12,
-            symbolShape: "circle",
-            effects: [
-              {
-                on: "hover",
-                style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-          },
-        ]}
+        axisBottom={null}
+        axisLeft={null}
+        animate={true}
+        motionStiffness={300}
+        // motionDamping={40}
+        useMesh={false}
+        legends={[]}
+        tooltip={({ node }) => (
+          <div
+            style={{
+              color: node.style.color,
+              background: "#333",
+              padding: "12px 16px",
+            }}
+          >
+            <strong>
+              {node.id} ({node.serieId})
+            </strong>
+            <br />
+            {`x: ${node.data.formattedX}`}
+            <br />
+            {`y: ${node.data.formattedY}`}
+          </div>
+        )}
       />
     </div>
   );

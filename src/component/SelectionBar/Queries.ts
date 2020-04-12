@@ -33,6 +33,7 @@ export const FETCH_SHOTCHARTS_QUERY = gql`
     ) {
       LOC_X
       LOC_Y
+      SHOT_MADE_FLAG
     }
   }
 `;

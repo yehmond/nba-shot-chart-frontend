@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import "./SelectionBar.css"
+import "./SelectionBar.css";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import {
   FETCH_YEARS_QUERY,
@@ -46,8 +46,30 @@ export default function SelectionBar() {
   };
 
   useEffect(() => {
+    const res: any[] = [
+      { id: "Made shot", data: [] },
+      { id: "Missed shot", data: [] },
+    ];
+    const parseShotChart = () => {
+      const copy = [...shotCharts.getShotCharts];
+      copy.forEach((sc) => {
+        // Renames keys "LOC_X" and "LOC_Y" to "x" and "y"
+        delete Object.assign(sc, { x: sc["LOC_X"] })["LOC_X"];
+        delete Object.assign(sc, { y: sc["LOC_Y"] })["LOC_Y"];
+
+        if (sc.SHOT_MADE_FLAG === 1) {
+          res[0].data.push(sc);
+        } else {
+          res[1].data.push(sc);
+        }
+      });
+
+      return res;
+    };
+
     if (shotCharts) {
-      setShotCharts(shotCharts);
+      const parsedShotCharts = parseShotChart();
+      setShotCharts(parsedShotCharts);
     }
   }, [setShotCharts, shotCharts]);
 
@@ -90,6 +112,7 @@ export default function SelectionBar() {
             as="select"
             onChange={(event: React.FormEvent<HTMLInputElement>) => {
               setTeam(event.currentTarget.value);
+              setPlayer("All Team Players");
               getPlayers();
             }}
             value={team}
