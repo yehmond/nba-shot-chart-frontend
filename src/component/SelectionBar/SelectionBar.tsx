@@ -76,12 +76,15 @@ export default function SelectionBar() {
   return (
     <div>
       <Form id={"selection-bar"} onSubmit={handleSubmit}>
-        <Form.Group controlId="exampleForm.SelectCustom">
-          <Form.Label>Year</Form.Label>
+        <Form.Group controlId="select-year">
+          <Form.Label>
+            <b>Year</b>
+          </Form.Label>
           <Form.Control
             as="select"
             onChange={(event: React.FormEvent<HTMLInputElement>) => {
               setYear(event.currentTarget.value);
+              setPlayer("All Teaem Players");
             }}
             value={year}
           >
@@ -91,7 +94,7 @@ export default function SelectionBar() {
               })}
           </Form.Control>
         </Form.Group>
-        <Form.Group controlId="exampleForm.SelectCustom">
+        <Form.Group controlId="select-seasonType">
           <Form.Label>Season Type</Form.Label>
           <Form.Control
             as="select"
@@ -106,7 +109,7 @@ export default function SelectionBar() {
             <option>Playoffs</option>
           </Form.Control>
         </Form.Group>
-        <Form.Group controlId="exampleForm.SelectCustom">
+        <Form.Group controlId="select-team">
           <Form.Label>Team</Form.Label>
           <Form.Control
             as="select"
@@ -124,7 +127,7 @@ export default function SelectionBar() {
               })}
           </Form.Control>
         </Form.Group>
-        <Form.Group controlId="exampleForm.SelectCustom">
+        <Form.Group controlId="select-player">
           <Form.Label>Player</Form.Label>
           <Form.Control
             as="select"
@@ -144,7 +147,7 @@ export default function SelectionBar() {
               })}
           </Form.Control>
         </Form.Group>
-        <Form.Group controlId="exampleForm.SelectCustom">
+        <Form.Group controlId="select-period">
           <Form.Label>Period</Form.Label>
           <Form.Control
             as="select"
@@ -166,6 +169,12 @@ export default function SelectionBar() {
         </Form.Group>
         <Button type="submit">Submit</Button>
       </Form>
+      <p id={"lag-note"}>
+        <span role="img" aria-label="Warning">
+          ⚠️
+        </span>
+        &nbsp; Note: The chart will lag if the selected dataset is too large.
+      </p>
     </div>
   );
 }

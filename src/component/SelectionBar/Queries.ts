@@ -34,6 +34,9 @@ export const FETCH_SHOTCHARTS_QUERY = gql`
       LOC_X
       LOC_Y
       SHOT_MADE_FLAG
+      SHOT_TYPE
+      SHOT_ZONE_BASIC
+      ACTION_TYPE
     }
   }
 `;
