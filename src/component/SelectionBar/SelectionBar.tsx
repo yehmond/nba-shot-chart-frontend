@@ -17,6 +17,7 @@ import {
   defaultPeriod,
   defaultPlayer,
 } from "./DefaultValues";
+import { parseShotChart } from "../../utils/parseShotChart";
 
 export default function SelectionBar() {
   const [, setShotCharts] = useContext(ShotChartContext);
@@ -34,6 +35,7 @@ export default function SelectionBar() {
   const [getPlayers, { data: fetchedPlayers }] = useLazyQuery(
     FETCH_PLAYERS_QUERY, { variables: { year, seasonType, team } }
   );
+
   const [getShotCharts, { data: shotCharts }] = useLazyQuery(
     FETCH_SHOTCHARTS_QUERY
   );
@@ -46,30 +48,8 @@ export default function SelectionBar() {
   };
 
   useEffect(() => {
-    const res: any[] = [
-      { id: "Made shot", data: [] },
-      { id: "Missed shot", data: [] },
-    ];
-    const parseShotChart = () => {
-      const copy = [...shotCharts.getShotCharts];
-      copy.forEach((sc) => {
-        // Renames keys "LOC_X" and "LOC_Y" to "x" and "y"
-        delete Object.assign(sc, { x: sc["LOC_X"] })["LOC_X"];
-        delete Object.assign(sc, { y: sc["LOC_Y"] })["LOC_Y"];
-
-        if (sc.SHOT_MADE_FLAG === 1) {
-          res[0].data.push(sc);
-        } else {
-          res[1].data.push(sc);
-        }
-      });
-
-      return res;
-    };
-
     if (shotCharts) {
-      const parsedShotCharts = parseShotChart();
-      setShotCharts(parsedShotCharts);
+      setShotCharts(parseShotChart(shotCharts));
     }
   }, [setShotCharts, shotCharts]);
 
@@ -173,7 +153,8 @@ export default function SelectionBar() {
         <span role="img" aria-label="Warning">
           ⚠️
         </span>
-        &nbsp; Note: The chart will lag if the selected dataset is too large.
+        &nbsp; Note: The chart may become unresponsive if the selected dataset
+        is too large.
       </p>
     </div>
   );

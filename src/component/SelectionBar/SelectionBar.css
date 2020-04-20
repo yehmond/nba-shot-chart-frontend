@@ -12,4 +12,22 @@
 
 #lag-note {
   text-align: center;
+  padding: 0 10px;
+}
+
+#selection-bar button {
+  margin: 15px auto;
+  display: block;
+  border-radius: 50px;
+}
+
+@media only screen and (max-width: 600px) {
+  #selection-bar {
+    width: 90%;
+  }
+  #selection-bar > .form-group {
+    display: inline-block;
+    width: auto;
+    margin: 5px;
+  }
 }
