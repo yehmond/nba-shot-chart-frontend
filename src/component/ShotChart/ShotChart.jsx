@@ -60,7 +60,7 @@ export default function ShotChart() {
                   {node.data.SHOT_MADE_FLAG === 1 ? "Made Shot" : "Missed Shot"}
                 </strong>
                 <br />
-                {`Distance to Basket: ${distM} m (${distFt} ft)`}
+                {`Distance to basket: ${distM} m (${distFt} ft)`}
                 <br />
                 {`Shot zone: ${node.data.SHOT_ZONE_BASIC}`}
                 <br />

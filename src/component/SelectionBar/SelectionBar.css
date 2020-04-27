@@ -1,5 +1,6 @@
 #selection-bar {
   margin: 20px auto;
+  text-align-last: center;
   text-align: center;
   width: 80%;
 }
@@ -8,6 +9,10 @@
   display: inline-block;
   width: 10rem;
   margin: 15px 5px;
+}
+
+.form-control {
+  width: 10rem;
 }
 
 #lag-note {

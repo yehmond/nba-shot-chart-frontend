@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, ChangeEvent } from "react";
 import { Form, Button } from "react-bootstrap";
 import "./SelectionBar.css";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
@@ -62,25 +62,29 @@ export default function SelectionBar() {
           </Form.Label>
           <Form.Control
             as="select"
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
               setYear(event.currentTarget.value);
-              setPlayer("All Teaem Players");
+              setPlayer("All Team Players");
             }}
             value={year}
           >
-            {years &&
+            {years ? (
               years.getYears.map((elem: string) => {
                 return <option key={elem}>{elem}</option>;
-              })}
+              })
+            ) : (
+              <option>2018-19</option>
+            )}
           </Form.Control>
         </Form.Group>
         <Form.Group controlId="select-seasonType">
           <Form.Label>Season Type</Form.Label>
           <Form.Control
             as="select"
-            onChange={(event: React.FormEvent<HTMLInputElement>) =>
-              setSeasonType(event.currentTarget.value)
-            }
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              setSeasonType(event.currentTarget.value);
+              getPlayers();
+            }}
             value={seasonType}
           >
             <option>All Season Types</option>
@@ -93,7 +97,7 @@ export default function SelectionBar() {
           <Form.Label>Team</Form.Label>
           <Form.Control
             as="select"
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
               setTeam(event.currentTarget.value);
               setPlayer("All Team Players");
               getPlayers();
@@ -101,17 +105,20 @@ export default function SelectionBar() {
             value={team}
           >
             <option>All Teams</option>
-            {teams &&
+            {teams ? (
               teams.getTeams.map(({ name }: { name: string }) => {
                 return <option key={name}>{name}</option>;
-              })}
+              })
+            ) : (
+              <option>Toronto Raptors</option>
+            )}
           </Form.Control>
         </Form.Group>
         <Form.Group controlId="select-player">
           <Form.Label>Player</Form.Label>
           <Form.Control
             as="select"
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
               setPlayer(event.currentTarget.value);
             }}
             value={player}
@@ -131,7 +138,7 @@ export default function SelectionBar() {
           <Form.Label>Period</Form.Label>
           <Form.Control
             as="select"
-            onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
               setPeriod(event.currentTarget.value);
             }}
             value={period}

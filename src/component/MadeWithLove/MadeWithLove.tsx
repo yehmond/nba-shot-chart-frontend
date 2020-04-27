@@ -5,7 +5,7 @@ export default function MadeWithLove() {
   return (
     <footer className={"page-footer"} id={"made-with-love"}>
       <p>
-        Made after washing hands &ensp;
+        Made after washing hands&nbsp;
         <span role="img" aria-label="Soap">
           🧼
         </span>
@@ -13,7 +13,7 @@ export default function MadeWithLove() {
         <span role="img" aria-label="Hands">
           🤲
         </span>
-        &ensp; by&nbsp;
+        &nbsp;by&nbsp;
         <a href="https://www.github.com/yehmond">Raymond&nbsp;Yeh</a>
       </p>
     </footer>

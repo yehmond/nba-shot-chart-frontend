@@ -1,14 +1,22 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Home from "./pages/Home";
+import "bootstrap/dist/css/bootstrap.min.css";
+import NavBar from "./component/NavBar";
+import { ShotChartProvider } from "./ShotChartContext";
+import SelectionBar from "./component/SelectionBar/SelectionBar";
+import ShotChart from "./component/ShotChart/ShotChart";
+import MadeWithLove from "./component/MadeWithLove/MadeWithLove";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Route exact path='/' component={Home}/>
-    </BrowserRouter>
+    <>
+      <NavBar />
+      <ShotChartProvider>
+        <SelectionBar />
+        <ShotChart />
+      </ShotChartProvider>
+      <MadeWithLove />
+    </>
   );
 }
 
