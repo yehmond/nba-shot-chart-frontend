@@ -1,5 +1,6 @@
 import React from "react";
 import { ResponsiveScatterPlotCanvas } from "@nivo/scatterplot";
+import { getDistance } from "../../Util";
 import "./ShotChart.css";
 
 export default function ShotChart(props) {
@@ -22,18 +23,14 @@ export default function ShotChart(props) {
       axisLeft={null}
       animate={false}
       useMesh={false}
-      // motionStiffness={90}
-      // motionDamping={40}
       legends={[]}
       tooltip={({ node }) => {
         const xM = node.data.formattedX.meters;
         const xFt = node.data.formattedX.feet;
         const yM = node.data.formattedY.meters;
         const yFt = node.data.formattedY.feet;
-        const distM = Math.sqrt(Math.pow(xM, 2) + Math.pow(yM, 2)).toFixed(2); //prettier-ignore
-        const distFt = Math.sqrt(Math.pow(xFt, 2) + Math.pow(yFt, 2)).toFixed(
-          2
-        );
+        const distM = getDistance(xM, yM).toFixed(2);
+        const distFt = getDistance(xFt, yFt).toFixed(2);
         return (
           <div
             style={{

@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { ShotChartContext } from "../../ShotChartContext";
 import "./ShotChartContainer.css";
 import ShotChart from "./ShotChart";
 import { Spinner } from "react-bootstrap";
+import { useWindowSize } from "../../Util";
 
 export default function ShotChartContainer({ box }) {
   const dimensions = useWindowSize();
@@ -16,7 +17,7 @@ export default function ShotChartContainer({ box }) {
     width = 0.5 * dimensions.width;
   } else {
     // Mobile
-    width = dimensions.width;
+    width = dimensions.width - 24;
   }
   const height = (470 / 500) * width;
   return (
@@ -38,24 +39,4 @@ export default function ShotChartContainer({ box }) {
       </div>
     </div>
   );
-}
-
-function useWindowSize() {
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-  useEffect(() => {
-    function handleResize() {
-      setDimensions({
-        height: window.innerHeight,
-        width: window.innerWidth,
-      });
-    }
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  });
-  return dimensions;
 }

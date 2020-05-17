@@ -12,10 +12,12 @@
 
 .left-top {
   grid-area: left-top;
+  align-self: flex-end;
 }
 
 .left-bot {
   grid-area: left-bot;
+  align-self: flex-start;
 }
 
 .mid {
@@ -25,13 +27,15 @@
 
 .right-top {
   grid-area: right-top;
+  align-self: flex-end;
 }
 
 .right-bot {
   grid-area: right-bot;
+  align-self: flex-start;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 1000px) {
   #dashboard {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;

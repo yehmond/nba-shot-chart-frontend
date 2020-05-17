@@ -1,4 +1,4 @@
-import React, { useState, useContext, ChangeEvent } from "react";
+import React, { useState, useContext, ChangeEvent, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { scroller } from "react-scroll";
 import "./SelectionBar.css";
@@ -18,6 +18,7 @@ import {
   defaultPeriod,
   defaultPlayer,
 } from "./DefaultValues";
+import { parseShotChart } from "../../Util";
 
 export default function SelectionBar() {
   const [, setShotCharts] = useContext(ShotChartContext);
@@ -51,8 +52,7 @@ export default function SelectionBar() {
     }
   );
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     scroller.scrollTo("dashboard", {
       smooth: true,
       duration: 600,
@@ -63,9 +63,13 @@ export default function SelectionBar() {
     });
   };
 
+  useEffect(() => {
+    handleSubmit();
+  }, []);
+
   return (
     <div>
-      <Form id={"selection-bar"} onSubmit={handleSubmit}>
+      <Form id={"selection-bar"}>
         <Form.Group controlId="select-year">
           <Form.Label>Year</Form.Label>
           <Form.Control
@@ -73,6 +77,7 @@ export default function SelectionBar() {
             onChange={(event: ChangeEvent<HTMLSelectElement>) => {
               setYear(event.currentTarget.value);
               setPlayer("All Team Players");
+              getPlayers();
             }}
             value={year}
           >
@@ -165,36 +170,14 @@ export default function SelectionBar() {
             <option value={"8"}>OT 4</option>
           </Form.Control>
         </Form.Group>
-        <Button type="submit">Submit</Button>
+        <Button onClick={handleSubmit}>Submit</Button>
       </Form>
-      <p id={"lag-note"}>
+      <p id={"caution-note"}>
         <span role="img" aria-label="Warning">
           ⚠️
         </span>
-        &nbsp; Note: The chart may become unresponsive if the selected dataset
-        is too large.
+        &nbsp; The chart may not load if the selected dataset is too large.
       </p>
     </div>
   );
-}
-
-function parseShotChart(shotCharts: any) {
-  const res: any[] = [
-    { id: "Made shot", data: [] },
-    { id: "Missed shot", data: [] },
-  ];
-  const copy = [...shotCharts.getShotCharts];
-  copy.forEach((sc) => {
-    // Renames keys "LOC_X" and "LOC_Y" to "x" and "y"
-    delete Object.assign(sc, { x: sc["LOC_X"] })["LOC_X"];
-    delete Object.assign(sc, { y: sc["LOC_Y"] })["LOC_Y"];
-
-    if (sc.SHOT_MADE_FLAG === 1) {
-      res[0].data.push(sc);
-    } else {
-      res[1].data.push(sc);
-    }
-  });
-
-  return res;
 }

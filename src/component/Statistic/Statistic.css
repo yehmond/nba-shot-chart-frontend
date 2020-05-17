@@ -24,8 +24,7 @@
 .title {
   padding: 0.25rem 0.75rem;
   white-space: nowrap;
-  background-color: var(--gray);
-  /* background-color: #ededed; */
+  background-color: #ED8F03;
   color: #fff;
   border-radius: 30px;
 }
