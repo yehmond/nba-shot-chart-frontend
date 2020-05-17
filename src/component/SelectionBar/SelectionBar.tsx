@@ -1,5 +1,6 @@
-import React, { useState, useContext, useEffect, ChangeEvent } from "react";
+import React, { useState, useContext, ChangeEvent } from "react";
 import { Form, Button } from "react-bootstrap";
+import { scroller } from "react-scroll";
 import "./SelectionBar.css";
 import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import {
@@ -17,49 +18,56 @@ import {
   defaultPeriod,
   defaultPlayer,
 } from "./DefaultValues";
-import { parseShotChart } from "../../utils/parseShotChart";
 
 export default function SelectionBar() {
   const [, setShotCharts] = useContext(ShotChartContext);
   const [year, setYear] = useState(defaultYear);
   const [seasonType, setSeasonType] = useState(defaultSeasonType);
   const [team, setTeam] = useState(defaultTeam);
-  const [players] = useState(defaultPlayerOptions);
+  const [players, setPlayers] = useState(defaultPlayerOptions);
   const [player, setPlayer] = useState(defaultPlayer);
   const [period, setPeriod] = useState(defaultPeriod);
 
   const { data: years } = useQuery(FETCH_YEARS_QUERY);
   const { data: teams } = useQuery(FETCH_TEAMS_QUERY);
 
-  // prettier-ignore
   const [getPlayers, { data: fetchedPlayers }] = useLazyQuery(
-    FETCH_PLAYERS_QUERY, { variables: { year, seasonType, team } }
+    FETCH_PLAYERS_QUERY,
+    {
+      variables: { year, seasonType, team },
+      onCompleted: () => {
+        setPlayers(fetchedPlayers.getPlayers);
+      },
+    }
   );
 
   const [getShotCharts, { data: shotCharts }] = useLazyQuery(
-    FETCH_SHOTCHARTS_QUERY
+    FETCH_SHOTCHARTS_QUERY,
+    {
+      onCompleted: () => {
+        setShotCharts(parseShotChart(shotCharts));
+      },
+      fetchPolicy: "no-cache",
+    }
   );
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    scroller.scrollTo("dashboard", {
+      smooth: true,
+      duration: 600,
+    });
+    setShotCharts(["loading"]);
     getShotCharts({
       variables: { year, seasonType, team, player, period },
     });
   };
 
-  useEffect(() => {
-    if (shotCharts) {
-      setShotCharts(parseShotChart(shotCharts));
-    }
-  }, [setShotCharts, shotCharts]);
-
   return (
     <div>
       <Form id={"selection-bar"} onSubmit={handleSubmit}>
         <Form.Group controlId="select-year">
-          <Form.Label>
-            <b>Year</b>
-          </Form.Label>
+          <Form.Label>Year</Form.Label>
           <Form.Control
             as="select"
             onChange={(event: ChangeEvent<HTMLSelectElement>) => {
@@ -107,6 +115,13 @@ export default function SelectionBar() {
             <option>All Teams</option>
             {teams ? (
               teams.getTeams.map(({ name }: { name: string }) => {
+                if (name === "Los Angeles Clippers") {
+                  return (
+                    <option key={name} value={"LA Clippers"}>
+                      {name}
+                    </option>
+                  );
+                }
                 return <option key={name}>{name}</option>;
               })
             ) : (
@@ -124,12 +139,8 @@ export default function SelectionBar() {
             value={player}
           >
             <option>All Team Players</option>
-            {!fetchedPlayers &&
+            {players &&
               players.map((name: string) => {
-                return <option key={name}>{name}</option>;
-              })}
-            {fetchedPlayers &&
-              fetchedPlayers.getPlayers.map((name: string) => {
                 return <option key={name}>{name}</option>;
               })}
           </Form.Control>
@@ -165,4 +176,25 @@ export default function SelectionBar() {
       </p>
     </div>
   );
+}
+
+function parseShotChart(shotCharts: any) {
+  const res: any[] = [
+    { id: "Made shot", data: [] },
+    { id: "Missed shot", data: [] },
+  ];
+  const copy = [...shotCharts.getShotCharts];
+  copy.forEach((sc) => {
+    // Renames keys "LOC_X" and "LOC_Y" to "x" and "y"
+    delete Object.assign(sc, { x: sc["LOC_X"] })["LOC_X"];
+    delete Object.assign(sc, { y: sc["LOC_Y"] })["LOC_Y"];
+
+    if (sc.SHOT_MADE_FLAG === 1) {
+      res[0].data.push(sc);
+    } else {
+      res[1].data.push(sc);
+    }
+  });
+
+  return res;
 }

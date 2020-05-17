@@ -1,27 +1,7 @@
-#shot-chart-container {
-  width: max-content;
-  box-shadow: 0 0 90px -20px rgba(0, 0, 0, 0.35);
-  background-color: #2b2d2f;
-  border-radius: 30px;
-  margin: 30px auto;
-  padding: 30px;
-}
-
 #shot-chart {
-  /* min-height: 470px; */
-  /* min-width: 500px; */
-  /* height: 470px; */
-  /* display: block; */
   margin: 0 auto;
   background-repeat: no-repeat;
   background-color: #2b2d2f;
   background-size: 100% 100%;
   background-image: url(../../images/halfcourt.png);
-}
-
-@media only screen and (max-width: 600px) {
-  #shot-chart-container {
-    padding: 0;
-    width: max-content;
-  }
 }

@@ -36,7 +36,9 @@ export const FETCH_SHOTCHARTS_QUERY = gql`
       SHOT_MADE_FLAG
       SHOT_TYPE
       SHOT_ZONE_BASIC
+      SHOT_ZONE_AREA
       ACTION_TYPE
+      PLAYER_NAME
     }
   }
 `;

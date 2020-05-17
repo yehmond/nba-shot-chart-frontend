@@ -8,7 +8,8 @@ export default function NavBar() {
         <span role="img" aria-label="Basketball">
           🏀
         </span>
-        &nbsp;NBA Shot Chart
+        &nbsp;&nbsp;
+        <span style={{ fontWeight: 600 }}>NBA Shot Chart</span>
       </Navbar.Brand>
     </Navbar>
   );

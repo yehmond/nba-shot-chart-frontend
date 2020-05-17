@@ -1,13 +1,15 @@
 #selection-bar {
   margin: 20px auto;
-  text-align-last: center;
   text-align: center;
   width: 80%;
 }
 
-#selection-bar > .form-group {
+#selection-bar label {
+  font-weight: 600;
+}
+
+#selection-bar .form-group {
   display: inline-block;
-  width: 10rem;
   margin: 15px 5px;
 }
 
@@ -23,16 +25,22 @@
 #selection-bar button {
   margin: 15px auto;
   display: block;
-  border-radius: 50px;
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
 }
 
 @media only screen and (max-width: 600px) {
   #selection-bar {
     width: 90%;
+    text-align-last: center;
   }
-  #selection-bar > .form-group {
+  #selection-bar .form-group {
     display: inline-block;
     width: auto;
     margin: 5px;
+  }
+  .form-control {
+    width: 15rem;
   }
 }
