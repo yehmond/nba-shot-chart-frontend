@@ -1,4 +1,4 @@
-import React, { useState, useContext, ChangeEvent, useEffect } from "react";
+import React, { useState, useContext, ChangeEvent } from "react";
 import { Form, Button } from "react-bootstrap";
 import { scroller } from "react-scroll";
 import "./SelectionBar.css";
@@ -65,10 +65,6 @@ export default function SelectionBar() {
       variables: { year, seasonType, team, player, period },
     });
   };
-
-  useEffect(() => {
-    handleSubmit();
-  }, []);
 
   return (
     <div>

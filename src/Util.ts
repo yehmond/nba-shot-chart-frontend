@@ -23,7 +23,7 @@ export function useWindowSize() {
 export function parseShotChart(shotCharts: any) {
     const copy = [...shotCharts.getShotCharts];
     if (copy.length === 0) {
-        return [];
+        return ["none"];
     }
 
     const res: any[] = [
@@ -106,7 +106,7 @@ export function isError(shotcharts: any[]) {
 }
 
 export function isEmpty(shotcharts: any[]) {
-    return shotcharts.length === 0;
+    return shotcharts[0] === "none";
 }
 
 export function getMostFrequentShots(shotcharts: any) {
