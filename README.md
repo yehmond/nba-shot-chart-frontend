@@ -1,44 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 🏀 NBA Shot Chart (Frontend)
 
-## Available Scripts
+## Link
 
-In the project directory, you can run:
+🔗 https://nbashotchart.now.sh
 
-### `yarn start`
+## Description
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This is the frontend for **🏀 NBA Shot Chart** built with React. The repository for the backend can be found at [NBA Shot Chart Lambda](https://github.com/yehmond/nba-shot-chart-lambda).
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The purpose of this website is to display where on the court NBA players and their teams are shooting from, as well as provide some simple statistics related to the shot charts. Although the official NBA website features a page that displays each player's shot chart of the current regular season, many will find it difficult to navigate to other years and filter on playoffs, teams etc. Therefore, this site is intended to make those processes easier.
 
-### `yarn test`
+## Background
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The goal of this project was to explore and learn unfamiliar technologies for me (TypeScript, GraphQL, AWS Lambda, and MongoDB).
 
-### `yarn build`
+The shot chart data was collected using [NBA Statistics Scraper](https://github.com/yehmond/nba-scraper) and stored in an MongoDB Atlas instance.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Limitations
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- Due to the 512 MB storage limit for the free tier of MongoDB Atlas and the fact that I'm a poor student 😭, I was only able to store some of the NBA statistics in the cloud. The good news is that GitHub has a much higher storage limit and therefore if you want to use the scraped data, I've stored them as JSON files in the [NBA Statistics Scraper](https://github.com/yehmond/nba-scraper) repository.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Depending on the filters used, certain shot charts may not load successfully if the response payload exceeds 6 MB. This is due to the official limitations set by AWS Lambda. I've created another version with a server in this [repository](https://github.com/yehmond/nba-shot-chart-express) hosted at Heroku to address this problem. The Heroku hosted website is https://nba-shot-charts.herokuapp.com/.
 
-### `yarn eject`
+## Built With
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### Frontend
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- React (TypeScript)
+- [Apollo Client](https://www.apollographql.com/client/) (GraphQL)
+- [nivo](https://github.com/plouc/nivo)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Backend
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [Apollo Server](https://www.apollographql.com/server/)
+- Express (Used in Heroku version)
+- [Serverless](https://www.serverless.com/) (Used in AWS Lambda version)
+- AWS Lambda
+- MongoDB
