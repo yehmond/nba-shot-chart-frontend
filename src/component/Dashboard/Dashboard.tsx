@@ -3,40 +3,18 @@ import ShotChartContainer from "../ShotChart/ShotChartContainer";
 import Statistic from "../Statistic/Statistic";
 import { ShotChartContext } from "../../ShotChartContext";
 import { Element } from "react-scroll";
-import { getAccuracy, getAvgShotDist, isShotchartLoaded, getMostFrequentShots } from "../../Util";
+import {
+  getAccuracy,
+  getAvgShotDist,
+  getMostFrequentShots,
+  isEmpty,
+  isError,
+} from "../../Util";
 import "./Dashboard.css";
+import NoResultModal from "../NoResultModal";
 
 export default function Dashboard() {
   const [shotcharts] = useContext(ShotChartContext);
-
-  if (!isShotchartLoaded(shotcharts)) {
-    return (
-      <Element name="dashboard">
-        <div id="dashboard">
-          <Statistic title={"FG%"} value={""} box={"left-top"} align="right" />
-          <Statistic
-            title={"Mean Shot Distance"}
-            value={""}
-            box={"left-bot"}
-            align="right"
-          />
-          <ShotChartContainer box="mid" />
-          <Statistic
-            title={"Favorite Shot Zone"}
-            value={""}
-            box={"right-top"}
-            align="left"
-          />
-          <Statistic
-            title={"Favorite Shot Direction"}
-            value={""}
-            box={"right-bot"}
-            align="left"
-          />
-        </div>
-      </Element>
-    );
-  }
 
   const shotsObj = getMostFrequentShots(shotcharts);
   const fgp = getAccuracy(shotcharts);
@@ -44,6 +22,18 @@ export default function Dashboard() {
 
   return (
     <Element name="dashboard">
+      {isEmpty(shotcharts) && (
+        <NoResultModal
+          title={"No Data Found"}
+          message={`Seems like the selected team didn't make the playoffs for the selected year 👻`}
+        />
+      )}
+      {isError(shotcharts) && (
+        <NoResultModal
+          title={"Data size too large"}
+          message={"Please select another filter and try again."}
+        />
+      )}
       <div id="dashboard">
         <Statistic title={"FG%"} value={fgp} box={"left-top"} align="right" />
         <Statistic
@@ -52,7 +42,7 @@ export default function Dashboard() {
           box={"left-bot"}
           align="right"
         />
-        <ShotChartContainer box="mid" />
+        <ShotChartContainer box="mid" shotcharts={shotcharts} />
         <Statistic
           title={"Favorite Shot Zone"}
           value={shotsObj.zone}
@@ -69,5 +59,3 @@ export default function Dashboard() {
     </Element>
   );
 }
-
-

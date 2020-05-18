@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-import { ShotChartContext } from "../../ShotChartContext";
+import React from "react";
 import "./ShotChartContainer.css";
 import ShotChart from "./ShotChart";
 import { Spinner } from "react-bootstrap";
-import { useWindowSize } from "../../Util";
+import { useWindowSize, isLoading } from "../../Util";
 
-export default function ShotChartContainer({ box }) {
+export default function ShotChartContainer({ box, shotcharts }) {
   const dimensions = useWindowSize();
-  let [data] = useContext(ShotChartContext);
   let width;
   if (dimensions.width > 600 && dimensions.width > dimensions.height) {
     // Wide screen
@@ -20,6 +18,7 @@ export default function ShotChartContainer({ box }) {
     width = dimensions.width - 24;
   }
   const height = (470 / 500) * width;
+
   return (
     <div id={"shot-chart-container"} className={box}>
       <div
@@ -29,12 +28,12 @@ export default function ShotChartContainer({ box }) {
           width: `${width}px`,
         }}
       >
-        {data[0] === "loading" ? (
+        {isLoading(shotcharts) ? (
           <div id="spinner-container" style={{ height }}>
             <Spinner id="spinner" animation="border" variant="primary" />
           </div>
         ) : (
-          <ShotChart data={data} />
+          <ShotChart data={shotcharts} />
         )}
       </div>
     </div>

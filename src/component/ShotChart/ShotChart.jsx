@@ -1,12 +1,12 @@
 import React from "react";
 import { ResponsiveScatterPlotCanvas } from "@nivo/scatterplot";
-import { getDistance } from "../../Util";
+import { getDistance, isShotchartLoaded } from "../../Util";
 import "./ShotChart.css";
 
 export default function ShotChart(props) {
   return (
     <ResponsiveScatterPlotCanvas
-      data={props.data}
+      data={isShotchartLoaded(props.data) ? props.data : []}
       xScale={{ type: "linear", min: -250, max: 250 }}
       xFormat={displayLength}
       yScale={{ type: "linear", min: -50, max: 420 }}

@@ -48,6 +48,9 @@ export default function SelectionBar() {
       onCompleted: () => {
         setShotCharts(parseShotChart(shotCharts));
       },
+      onError: () => {
+        setShotCharts(["error"]);
+      },
       fetchPolicy: "no-cache",
     }
   );
@@ -172,12 +175,6 @@ export default function SelectionBar() {
         </Form.Group>
         <Button onClick={handleSubmit}>Submit</Button>
       </Form>
-      <p id={"caution-note"}>
-        <span role="img" aria-label="Warning">
-          ⚠️
-        </span>
-        &nbsp; The chart may not load if the selected dataset is too large.
-      </p>
     </div>
   );
 }

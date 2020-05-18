@@ -21,11 +21,15 @@ export function useWindowSize() {
 }
 
 export function parseShotChart(shotCharts: any) {
+    const copy = [...shotCharts.getShotCharts];
+    if (copy.length === 0) {
+        return [];
+    }
+
     const res: any[] = [
         { id: "Made shot", data: [] },
         { id: "Missed shot", data: [] },
     ];
-    const copy = [...shotCharts.getShotCharts];
     copy.forEach((sc) => {
         // Renames keys "LOC_X" and "LOC_Y" to "x" and "y"
         delete Object.assign(sc, { x: sc["LOC_X"] })["LOC_X"];
@@ -37,7 +41,6 @@ export function parseShotChart(shotCharts: any) {
             res[1].data.push(sc);
         }
     });
-
     return res;
 }
 
@@ -46,6 +49,10 @@ export function removeBrackets(text: string) {
 }
 
 export function getAccuracy(shotcharts: any) {
+    if (!isShotchartLoaded(shotcharts)) {
+        return "";
+    }
+
     const made = shotcharts[0].data.length;
     const missed = shotcharts[1].data.length;
     const fgp = (100 * made) / (made + missed);
@@ -57,6 +64,10 @@ export function getAccuracy(shotcharts: any) {
 }
 
 export function getAvgShotDist(shotcharts: any) {
+    if (!isShotchartLoaded(shotcharts)) {
+        return "";
+    }
+
     const madeDist = getTotalDistance(shotcharts[0].data);
     const missedDist = getTotalDistance(shotcharts[1].data);
     const made = shotcharts[0].data.length;
@@ -83,10 +94,29 @@ export function getDistance(x: number, y: number) {
 }
 
 export function isShotchartLoaded(shotcharts: any) {
-    return shotcharts.length > 0 && shotcharts[0] !== "loading";
+    return shotcharts[1];
+}
+
+export function isLoading(shotcharts: any) {
+    return shotcharts[0] === "loading";
+}
+
+export function isError(shotcharts: any[]) {
+    return shotcharts[0] === "error";
+}
+
+export function isEmpty(shotcharts: any[]) {
+    return shotcharts.length === 0;
 }
 
 export function getMostFrequentShots(shotcharts: any) {
+    if (!isShotchartLoaded(shotcharts)) {
+        return {
+            action: "",
+            zone: "",
+            area: ""
+        };
+    }
     const actionFreqMap: any = {};
     const zoneFreqMap: any = {};
     let maxAction = "";

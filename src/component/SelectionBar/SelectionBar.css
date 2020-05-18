@@ -17,11 +17,6 @@
   width: 10rem;
 }
 
-#caution-note {
-  text-align: center;
-  padding: 0 10px;
-}
-
 #selection-bar button {
   margin: 15px auto;
   display: block;
